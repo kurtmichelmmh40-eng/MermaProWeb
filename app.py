@@ -12,12 +12,14 @@ app.secret_key = "mermapro2025"
 # 2. Filtro para mostrar fecha legible (DESPUÉS de crear app)
 @app.template_filter('datetimeformat')
 def datetimeformat(value):
+    from datetime import datetime, timezone, timedelta
     try:
-        dt = datetime.fromisoformat(value)
-        return dt.strftime("%d/%m/%Y %H:%M")
-    except Exception:
+        # Convertimos de UTC a Perú (UTC-5)
+        dt_utc = datetime.fromisoformat(value).replace(tzinfo=timezone.utc)
+        dt_pe = dt_utc.astimezone(timezone(timedelta(hours=-5)))
+        return dt_pe.strftime("%d/%m/%Y %H:%M")
+    except:
         return value
-
 # 3. Resto de rutas
 @app.route("/")
 def index():
@@ -99,3 +101,4 @@ def exportar_excel():
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
