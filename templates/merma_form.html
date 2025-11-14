@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Nueva Merma - MermaPro{% endblock %}
+{% block content %}
+<h2 class="neon">Nueva merma</h2>
+<div class="row justify-content-center"><div class="col-md-6">
+  <div class="card"><div class="card-body">
+    <form method="post" enctype="multipart/form-data" onsubmit="return validar()">
+      <div class="mb-3"><label class="form-label">Producto</label>
+        <select name="producto" class="form-select" required>
+          {% for p in productos %}<option value="{{ p }}">{{ p }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="mb-3"><label class="form-label">Peso Inicial (g)</label>
+        <input type="number" step="0.01" name="inicial" class="form-control" required></div>
+      <div class="mb-3"><label class="form-label">Merma (g)</label>
+        <input type="number" step="0.01" name="merma" class="form-control" required></div>
+      <div class="mb-3"><label class="form-label">Foto (opcional)</label>
+        <input type="file" name="foto" class="form-control" accept="image/*"></div>
+      <button type="submit" class="btn btn-success w-100">Guardar e Imprimir</button>
+    </form>
+  </div></div>
+</div></div>
+<script>
+function validar(){
+  const ini = parseFloat(document.querySelector('[name=inicial]').value.replace(',','.'));
+  const mer = parseFloat(document.querySelector('[name=merma]').value.replace(',','.'));
+  if(mer<0 || mer>ini){alert("Merma inválida");return false;}
+  return true;
+}
+</script>
+{% endblock %}

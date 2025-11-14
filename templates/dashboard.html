@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - MermaPro{% endblock %}
+{% block content %}
+<h2 class="neon">Mis mermas registradas</h2>
+{% if mermas %}
+<div class="table-responsive">
+  <table class="table table-dark table-striped align-middle">
+    <thead><tr>
+      <th>Producto</th><th>Peso Inicial (g)</th><th>Merma (g)</th><th>Final (g)</th><th>% Merma</th><th>Fecha</th><th>Foto</th>
+    </tr></thead>
+    <tbody>
+      {% for m in mermas %}
+      <tr>
+        <td>{{ m.producto }}</td>
+        <td>{{ "%.2f"|format(m.inicial) }}</td>
+        <td>{{ "%.2f"|format(m.merma) }}</td>
+        <td>{{ "%.2f"|format(m.final) }}</td>
+        <td>{{ m.porc_merma }} %</td>
+        <td>{{ m.fecha[:16] }}</td>
+        <td>{% if m.foto %}📷{% endif %}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="alert alert-info">No has registrado mermas aún. <a href="{{ url_for('nueva') }}" class="alert-link">Crear la primera</a></div>
+{% endif %}
+{% endblock %}
