@@ -5,6 +5,15 @@ from datetime import datetime
 import os
 from openpyxl import Workbook
 
+@app.template_filter('datetimeformat')
+def datetimeformat(value):
+    from datetime import datetime
+    try:
+        dt = datetime.fromisoformat(value)
+        # ➜ Cambia aquí tu zona horaria
+        return dt.strftime("%d/%m/%Y %H:%M")
+    except:
+        return value
 app = Flask(__name__)
 app.secret_key = "mermapro2025"
 
@@ -96,3 +105,4 @@ def exportar_excel():
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
