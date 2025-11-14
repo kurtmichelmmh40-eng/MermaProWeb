@@ -11,7 +11,7 @@ def datetimeformat(value):
     try:
         dt = datetime.fromisoformat(value)
         # ➜ Cambia aquí tu zona horaria
-        return dt.strftime("%d/%m/%Y %H:%M")
+        return dt.strftime("%d/%m/%Y    %H:%M")
     except:
         return value
 app = Flask(__name__)
@@ -105,4 +105,5 @@ def exportar_excel():
 def logout():
     session.clear()
     return redirect(url_for("login"))
+
 
