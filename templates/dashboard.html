@@ -16,7 +16,7 @@
         <td>{{ "%.2f"|format(m.merma) }}</td>
         <td>{{ "%.2f"|format(m.final) }}</td>
         <td>{{ m.porc_merma }} %</td>
-        <td>{{ m.fecha[:16] }}</td>
+        <td>{{ m.fecha|datetimeformat }}</td>
         <td>{% if m.foto %}📷{% endif %}</td>
       </tr>
       {% endfor %}
@@ -26,4 +26,5 @@
 {% else %}
 <div class="alert alert-info">No has registrado mermas aún. <a href="{{ url_for('nueva') }}" class="alert-link">Crear la primera</a></div>
 {% endif %}
+
 {% endblock %}
