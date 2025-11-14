@@ -5,27 +5,20 @@ from datetime import datetime
 import os
 from openpyxl import Workbook
 
-@app.template_filter('datetimeformat')
-def datetimeformat(value):
-    from datetime import datetime
-    try:
-        dt = datetime.fromisoformat(value)
-        # ➜ Cambia aquí tu zona horaria
-        return dt.strftime("%d/%m/%Y    %H:%M")
-    except:
-        return value
+# 1. Crear instancia Flask ANTES que cualquier filtro o ruta
 app = Flask(__name__)
 app.secret_key = "mermapro2025"
 
-# Inicializar BD
-init_db()
+# 2. Filtro para mostrar fecha legible (DESPUÉS de crear app)
+@app.template_filter('datetimeformat')
+def datetimeformat(value):
+    try:
+        dt = datetime.fromisoformat(value)
+        return dt.strftime("%d/%m/%Y %H:%M")
+    except Exception:
+        return value
 
-# Carpeta de uploads
-UPLOAD_FOLDER = "static/uploads"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-
-# ---------- RUTAS ----------
+# 3. Resto de rutas
 @app.route("/")
 def index():
     return redirect(url_for("login"))
@@ -77,7 +70,8 @@ def nueva():
         foto = request.files["foto"]
         foto_path = None
         if foto and foto.filename:
-            foto_path = os.path.join(app.config["UPLOAD_FOLDER"], foto.filename)
+            foto_path = os.path.join("static/uploads", foto.filename)
+            os.makedirs("static/uploads", exist_ok=True)
             foto.save(foto_path)
         guardar_merma(session["user_id"], producto, inicial, merma, final, foto_path)
         return redirect(url_for("dashboard"))
@@ -105,5 +99,3 @@ def exportar_excel():
 def logout():
     session.clear()
     return redirect(url_for("login"))
-
-
